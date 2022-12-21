@@ -158,3 +158,68 @@ def about(request):
 ```
 
 ---
+### 5. rendering data from backend in html
+We can add dynamic data in our `html` template
+
+#### `views.py`
+- We create a dictionary which has the data required.
+- The dictionary is then passed into the `render()` function
+```python
+def about(request):
+    context = {
+        "name": "hasbulla"
+        "age" : "18"
+    }
+    return render(request, "about.html", context) 
+```
+
+#### `about.html`
+- Based on the keys created in the context dictionary.
+- Key belonging to the value is placed in `{{}}`.
+- We need to use [**jinja**](https://svn.python.org/projects/external/Jinja-2.1.1/docs/_build/html/templates.html) template in our *html* file.
+
+```html
+    <h1>I am {{name}}</h1>
+```
+
+---
+
+### 6. Render user input from html
+- We can take user input in the html, using the form or input tag.
+- We need to send the data in backend, so we need a submit button too.
+
+#### `form.html`
+
+```html
+    <form action="" method="">
+        <textarea name="usertext" id="textarea" cols="100" rows="10">{{text}}</textarea>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+```
+- `action=` sends the data to the particular URL
+- `method=` can be a get request or post request
+
+```html
+    {% if word_count %}
+    <h1>Total words are: {{word_count}}</h1>
+    {% endif %}
+```
+- This jinja code checks if `word_count` exists.
+- Based on the above boolean argument `Total words are: {{word_count}}` is rendered.
+
+#### `views.py`
+- We use `GET` attribute of `request` parameter to fetch the user data from the `html` file.
+- `GET` is a dictionary, and contains the *name* of all html tags as keys and their values as values.
+
+```python
+try:
+    words = request.GET["usertext"]
+    return render(request, "form.html", {"text": words, "word_count": len(words.split())})
+except Exception:
+    return render(request, "form.html")
+```
+- This code block checks if the get request works , if it does then we render the html with `word_count`
+else we dont render it with `word_count`.
+
+---

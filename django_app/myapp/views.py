@@ -9,4 +9,17 @@ def index(request):
 
 
 def about(request):
-    return render(request, "about.html")
+    person_name = 'hasbulla'
+    return render(request, "about.html" , {"name" : person_name})
+
+
+def form(request):
+    try:
+        words = request.GET["usertext"]
+        return render(request, "form.html", {"text": words, "word_count": len(words.split())})
+    except Exception:
+        return render(request, "form.html")
+
+def counter(request):
+    words = request.GET["usertext"]
+    return render(request, "counter.html", {"word_count": len(words.split())})
