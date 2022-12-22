@@ -15,11 +15,11 @@ def about(request):
 
 def form(request):
     try:
-        words = request.GET["usertext"]
+        words = request.POST["usertext"]
         return render(request, "form.html", {"text": words, "word_count": len(words.split())})
     except Exception:
         return render(request, "form.html")
 
 def counter(request):
-    words = request.GET["usertext"]
+    words = request.POST["usertext"]
     return render(request, "counter.html", {"word_count": len(words.split())})

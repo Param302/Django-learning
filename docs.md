@@ -1,7 +1,6 @@
 # Django `3.2.2` learning docs
 
-> Following *Freecodecamp*'s -  **[Python Backend Web Development Course (with Django)](https://www.youtube.com/watch?v=jBzwzrDvZ18)** tutaorial by [*Code with Tomi*](https://www.youtube.com/c/CodeWithTomi)
-
+> Following _Freecodecamp_'s - **[Python Backend Web Development Course (with Django)](https://www.youtube.com/watch?v=jBzwzrDvZ18)** tutaorial by [_Code with Tomi_](https://www.youtube.com/c/CodeWithTomi)
 
 ### 1. Make a django project
 
@@ -10,18 +9,18 @@ django-admin startproject <project_name>
 ```
 
 > We can create different apps in a django project
-> 
+>
 > Example:
-> 
+>
 > 1. **Twitter**
-> 
+>
 > -   **Twitter** is a project
 > -   _Home_ page is an app
 > -   _Explore_ is an app
 > -   _Notifications_ is an app
-> 
+>
 > 2. **Instagram**
-> 
+>
 > -   **Instagram** is a project
 > -   _Home_ is an app
 > -   _Search_ is an app
@@ -158,59 +157,70 @@ def about(request):
 ```
 
 ---
+
 ### 5. rendering data from backend in html
+
 We can add dynamic data in our `html` template
 
 #### `views.py`
-- We create a dictionary which has the data required.
-- The dictionary is then passed into the `render()` function
+
+-   We create a dictionary which has the data required.
+-   The dictionary is then passed into the `render()` function
+
 ```python
 def about(request):
     context = {
         "name": "hasbulla"
         "age" : "18"
     }
-    return render(request, "about.html", context) 
+    return render(request, "about.html", context)
 ```
 
 #### `about.html`
-- Based on the keys created in the context dictionary.
-- Key belonging to the value is placed in `{{}}`.
-- We need to use [**jinja**](https://svn.python.org/projects/external/Jinja-2.1.1/docs/_build/html/templates.html) template in our *html* file.
+
+-   Based on the keys created in the context dictionary.
+-   Key belonging to the value is placed in `{{}}`.
+-   We need to use [**jinja**](https://svn.python.org/projects/external/Jinja-2.1.1/docs/_build/html/templates.html) template in our _html_ file.
 
 ```html
-    <h1>I am {{name}}</h1>
+<h1>I am {{name}}</h1>
 ```
 
 ---
 
 ### 6. Render user input from html
-- We can take user input in the html, using the form or input tag.
-- We need to send the data in backend, so we need a submit button too.
+
+-   We can take user input in the html, using the form or input tag.
+-   We need to send the data in backend, so we need a submit button too.
 
 #### `form.html`
 
 ```html
-    <form action="" method="">
-        <textarea name="usertext" id="textarea" cols="100" rows="10">{{text}}</textarea>
-        <br>
-        <input type="submit" value="Submit">
-    </form>
+<form action="" method="">
+    <textarea name="usertext" id="textarea" cols="100" rows="10">
+{{text}}</textarea
+    >
+    <br />
+    <input type="submit" value="Submit" />
+</form>
 ```
-- `action=` sends the data to the particular URL
-- `method=` can be a get request or post request
+
+-   `action=` sends the data to the particular URL
+-   `method=` can be a get request or post request
 
 ```html
-    {% if word_count %}
-    <h1>Total words are: {{word_count}}</h1>
-    {% endif %}
+{% if word_count %}
+<h1>Total words are: {{word_count}}</h1>
+{% endif %}
 ```
-- This jinja code checks if `word_count` exists.
-- Based on the above boolean argument `Total words are: {{word_count}}` is rendered.
+
+-   This jinja code checks if `word_count` exists.
+-   Based on the above boolean argument `Total words are: {{word_count}}` is rendered.
 
 #### `views.py`
-- We use `GET` attribute of `request` parameter to fetch the user data from the `html` file.
-- `GET` is a dictionary, and contains the *name* of all html tags as keys and their values as values.
+
+-   We use `GET` attribute of `request` parameter to fetch the user data from the `html` file.
+-   `GET` is a dictionary, and contains the _name_ of all html tags as keys and their values as values.
 
 ```python
 try:
@@ -219,7 +229,70 @@ try:
 except Exception:
     return render(request, "form.html")
 ```
-- This code block checks if the get request works , if it does then we render the html with `word_count`
-else we dont render it with `word_count`.
+
+-   This code block checks if the get request works , if it does then we render the html with `word_count`
+    else we dont render it with `word_count`.
+
+---
+
+### 7. `GET` and `POST` method
+
+-   `POST` request is used when we want to send the data confidentially.
+-   `GET` request is used when we don't work with confidential data.
+-   `GET` method carries request in parameter appended in URL and it is less secure than `POST` method.
+
+```html
+<form method=""></form>
+```
+
+-   When method is empty it defaults to `GET`.
+
+#### `views.py`
+
+```python
+words = request.POST["usertext"]
+```
+
+-   The `request.GET` is changed to `request.POST`
+
+#### `form.html`
+
+-   When making a `POST` request a `csrf_token` must be passed on to prevent hacker attacks.
+
+```html
+<form method="POST">{% csrf_token %}</form>
+```
+
+---
+
+### 8. Adding Static files
+
+-   To add _static_ files like _stylesheets_, javascript files etc.., we need to store them in `static` folder.
+
+#### `settings.py`
+
+-   We need to tell django where to locate _static_ files.
+-   So, in `settings.py`, after `STATIC_URL = '/static/'` code, we need to add one line in the code.
+
+```python
+import os
+STATICFILES_DIRS = (os.path.join(BASE_DIR , "static") , )
+```
+
+-   The variable name should be the exact same as above.
+
+#### html files
+
+-   Inside _HTML_ templates, where we use those _static_ files, we need to write `load static` jinja command on the top of html code.
+
+```html
+{% load static %}
+```
+
+-   We also have to specify `static` in the link of static files inside _HTML_ templates, where we are linking those files.
+
+```html
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+```
 
 ---

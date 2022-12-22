@@ -1,0 +1,35 @@
+h1 {
+    color: #ff0000;
+    margin: auto;
+    text-align: center;
+}
+
+h3 {
+    color: #00aaff;
+    padding: 30px;
+}
+
+h5 {
+    color: #00ff00;
+    padding: 20px;
+}
+
+input[type="submit"] {
+    background-color: rgb(15, 15, 15);
+    color: #00ff00;
+    padding: 20px 50px;
+    font-size: 30px;
+    margin: 50px auto;
+}
+
+p {
+    padding: 5px 20px;
+    font-style: italic;
+}
+
+img {
+    width: 500px;
+    height: 200px;
+    border: 5px solid rgb(255, 0, 150);
+    border-radius: 50%;
+}
