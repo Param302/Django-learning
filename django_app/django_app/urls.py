@@ -23,4 +23,5 @@ urlpatterns = [
     path("about", include("myapp.urls")),
     path("form", include("myapp.urls")),
     path("counter", include("myapp.urls")),
+    path("details", include("myapp.urls")),
 ]

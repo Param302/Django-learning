@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", "Helvetica Neue", Helvetica, Arial;
+}
+
+h1 {
+    text-align: center;
+    font-weight: bolder;
+    padding: 2rem 0;
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(3, 20%);
+    grid-template-rows: repeat(2, 20rem);
+    justify-content: space-around;
+    align-items: space-evenly;
+    gap: 50px;
+}
+
+.card {
+    position: relative;
+    padding: 2rem 1rem;
+    background: linear-gradient(90deg, #fcdf8a 0%, #f38381 100%);
+    border-radius: 10px;
+    box-shadow: 0 0 20px 1px rgba(105, 101, 101, 0.204);
+    transition: transform 200ms ease-in-out;
+}
+
+.card:hover {
+    background: linear-gradient(135deg, #fcdf8a 0%, #f38381 100%);
+    box-shadow: 0 20px 50px 3px rgba(105, 101, 101, 0.404);
+    transform: scale(1.08);
+}
+
+.card .details {
+    height: 70px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.card .details i {
+    font-size: 3rem;
+    float: left;
+    padding: 10px;
+    padding-right: 20px;
+}
+
+.card .details h2 {
+    padding-top: 10px;
+}
+
+.card .class {
+    text-align: center;
+}
+
+.card .class span {
+    font-size: 16px;
+}
+
+.card .marks {
+    margin-bottom: 2.2rem;
+    text-align: center;
+}
+
+.card .is_pass {
+    width: 100%;
+    border-top: 0.5px solid black;
+    position: absolute;
+    left: 0;
+    text-align: center;
+    padding-top: 15px;
+    height: 50px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    margin: 20px 0;
+}
+
+
+@media screen and (max-width: 990px) {
+    main {
+        grid-template-columns: repeat(2, 33%);
+        grid-template-rows: repeat(5, 18rem);
+    }
+
+    .card .marks {
+        margin-bottom: 1rem;
+    }
+
+    .card .is_pass {
+        padding-top: 10px;
+    }
+}
+
+
+
+/* 
+Fail: background:linear-gradient(135deg, #F5515F 0%,#A1051D 100%);
+Pass: background:linear-gradient(135deg, #42e695 0%,#3bb2b8 100%); */

@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'std_details.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <script defer src="https://kit.fontawesome.com/17e711f8a0.js" crossorigin="anonymous"></script>
+    <title>Student Details</title>
+</head>
+
+<body>
+    <h1>Student Details ({{count}})</h1>
+    <main>
+        {% for student in students %}
+        <div class="card" id="card-2">
+            <div class="details">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h2>{{student.name}}</h2>
+            </div>
+            <h3 class="class">{{student.cls}}<sup>th</sup><span>&emsp;-&ensp;{{student.roll_no}}</span></h3>
+            <h3 class="marks">Total marks: {{student.total_marks}}</h3> <br>
+            {% if student.is_pass %}
+            <h2 class="is_pass" style="background:linear-gradient(135deg, #42e695 0%,#3bb2b8 100%);">Pass</h2>
+            {% else %}
+            <h2 class="is_pass" style="background:linear-gradient(135deg, #F5515F 0%,#A1051D 100%);">Fail</h2>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </main>
+    <footer><h3><a href="/">Home</a></h3></footer>
+</body>
+</html>

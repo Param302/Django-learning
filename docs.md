@@ -296,3 +296,220 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR , "static") , )
 ```
 
 ---
+
+### 9. Django Models
+
+-   We can access and manage data in django using **django models**.
+-   A **django model** works as a _table_ in the database.
+-   We don't need to excute _SQL_ queries externally, we can make **django models** which will handle all those things automatically.
+
+#### `models.py` (myapp)
+
+-   We create a **model** in `models.py`, using class (`OOP`).
+
+Example:
+
+```python
+class Student:
+    roll_no: int
+    name: str
+    cls: str
+    total_marks: int | float
+    is_pass: bool
+```
+
+#### `views.py`
+
+-   We can use our _django_ **models** in our template files to render the data.
+-   We need to create an instance of our class, i.e. a row in table, and we can pass it in `render()` function.
+-   Currently, we are creating instances, not adding the data in original database.
+
+Example:
+
+```python
+def student_page(request):
+    std1 = Student()
+    std1.name = "Karan"
+    std1.cls = "12"
+    std1.roll_no = 20
+    std1.total_marks = 300
+    std1.is_pass = True
+
+    return render(request, "details.html", {"student1": std1})
+```
+
+#### `details.html`
+
+-   In our _html_ template file, we can access it using `.` dot notation, same as we access in python, but using _jinja_ template.
+
+Example:
+
+```html
+<div class="card" id="card-2">
+    <div class="details">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h2>{{student1.name}}</h2>
+    </div>
+    <h3 class="class">
+        {{student1.cls}}<sup>th</sup
+        ><span>&emsp;-&ensp;{{student1.roll_no}}</span>
+    </h3>
+    <h3 class="marks">Total marks: {{student1.total_marks}}</h3>
+    <br />
+    <h2 class="is_pass">{{student1.is_pass}}</h2>
+</div>
+```
+
+-   But if we need to show data in same template multiple times, using _jinja_ template, we can make for loop, which will reduce the code.
+
+Example:
+
+```html
+{% for student in students %}
+<div class="card" id="card-2">
+    <div class="details">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h2>{{student.name}}</h2>
+    </div>
+    <h3 class="class">
+        {{student.cls}}<sup>th</sup>
+        <span>&emsp;-&ensp;{{student.roll_no}}</span>
+    </h3>
+    <h3 class="marks">Total marks: {{student.total_marks}}</h3>
+    <br />
+    {% if student.is_pass %}
+    <h2
+        class="is_pass"
+        style="background:linear-gradient(135deg, #42e695 0%,#3bb2b8 100%);"
+    >
+        Pass
+    </h2>
+    {% else %}
+    <h2
+        class="is_pass"
+        style="background:linear-gradient(135deg, #F5515F 0%,#A1051D 100%);"
+    >
+        Fail
+    </h2>
+    {% endif %}
+</div>
+{% endfor %}
+```
+
+-   Same as `if` statements, we need to end `for` loops too.
+-   In Python, only the code indented inside `if`/`loops` execute, but in html, we need to make sure where it should be ended.
+
+---
+
+### 10. Django Admin pannel and Manipulation of Database
+
+-   Earlier, we have created our _django_ **model** in `models.py`, but it was just a boilerplate.
+
+#### `models.py` (myapp)
+
+-   To create the database, we need to do some modifications to our **model**.
+-   We need to:
+-   -   Inherit our **model** from `models.Model`.
+-   -   Specify the type of value each field should have.
+-   We don't need to create `id` field in any **model**, django will create it automatically and set it as **Primary Key**.
+
+Example:
+
+```python
+class Student(models.Model):
+    roll_no = models.PositiveSmallIntegerField("Roll no.")
+    name = models.CharField("Name", max_length=20)
+    cls = models.CharField("Class", max_length=2)
+    total_marks = models.PositiveSmallIntegerField("Total marks")
+    is_pass = models.BooleanField("Pass?", default=True)
+```
+
+-   There are various types, a field can have.
+-   All field types are avaible [here](https://docs.djangoproject.com/en/3.2/ref/models/fields/#model-field-types)
+
+#### `settings.py` (django_app)
+
+-   Now that we have created our database model, we need our _django_ project to identify it.
+-   And, we have created it inside `myapp` app, so we need to include it in `INSTALLED_APPS` in `settings.py` of our main django project (`django_app`).
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    "myapp",     # <-------
+]
+```
+
+#### Terminal work
+
+-   We need to tell django to make the database accordingly.
+-   For that, we first need to stage our changes, just like we execute our query (not commit).
+-   So, we need to run `makemigrations` command inside our django project in terminal.
+
+```bash
+python manage.py makemigrations
+```
+
+-   We'll see this kind of message, if we have wrote correct code, without any mistake.
+
+```bash
+$ python manage.py makemigrations
+Migrations for 'myapp':
+  myapp\migrations\0001_initial.py
+    - Create model Student
+```
+
+-   To execute these changes, to make the table, we need to run `migrate` command inside our django project in terminal.
+
+```bash
+python manage.py migrate
+```
+
+-   It will create a `migrations` folder inside our app.
+
+#### Admin pannel
+
+-   Now, that we have made the changes, we can see and control everything in our django project using **Admin pannel**.
+-   To access it, we need to create a _superuser_, with which we can login in our admin pannel
+-   To create a _superuser_, we need to run following command inside our django project in terminal.
+
+```bash
+$ python manage.py createsuperuser
+```
+
+-   We need to create a _username_ and _password_ (compulsory).
+-   After creating a _superuser_, we can access the **Admin pannel** using `http://127.0.0.1:8000/admin/` url.
+
+#### `admin.py` (myapp)
+
+-   We also need to register our model in django **Admin pannel** to view in admin pannel.
+-   We'll use `admin.site.register()` function to register our model.
+
+```python
+from django.contrib import admin
+from .models import Student
+
+# Register your models here.
+admin.site.register(Student)
+```
+
+-   Now, we can access our _model_ through **Admin pannel**.
+-   We can add some rows manually, which basically called as `objects` in a _model_.
+
+#### `views.py` (myapp)
+
+-   To access the data from our _model_, we need to import it.
+-   To fetch all the data, we'll use `objects.all()` method from our _model_.
+-   It returns a list of objects (rows).
+
+```python
+def student_details(request):
+    students = Student.objects.all()
+    return render(request, "details.html", {"students": students})
+```
+
+---
