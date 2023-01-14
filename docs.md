@@ -242,7 +242,7 @@ except Exception:
 -   `GET` method carries request in parameter appended in URL and it is less secure than `POST` method.
 
 ```html
-<form method=""></form>
+<form method="POST"></form>
 ```
 
 -   When method is empty it defaults to `GET`.
@@ -425,7 +425,7 @@ class Student(models.Model):
 ```
 
 -   There are various types, a field can have.
--   All field types are avaible [here](https://docs.djangoproject.com/en/3.2/ref/models/fields/#model-field-types)
+-   All field types are available [here](https://docs.djangoproject.com/en/3.2/ref/models/fields/#model-field-types)
 
 #### `settings.py` (django_app)
 
@@ -451,7 +451,7 @@ INSTALLED_APPS = [
 -   So, we need to run `makemigrations` command inside our django project in terminal.
 
 ```bash
-python manage.py makemigrations
+$ python manage.py makemigrations
 ```
 
 -   We'll see this kind of message, if we have wrote correct code, without any mistake.
@@ -466,7 +466,7 @@ Migrations for 'myapp':
 -   To execute these changes, to make the table, we need to run `migrate` command inside our django project in terminal.
 
 ```bash
-python manage.py migrate
+$ python manage.py migrate
 ```
 
 -   It will create a `migrations` folder inside our app.
@@ -511,5 +511,81 @@ def student_details(request):
     students = Student.objects.all()
     return render(request, "details.html", {"students": students})
 ```
+
+---
+
+### 11. User registration in django
+
+-   To register a user, we first need to create a registration template, where user can enter their details like email, phone number, password etc...
+
+#### `urls.py` (myapp)
+
+-   We have to link that template to our app in `urls.py`.
+
+```python
+    path("register", views.register, name="register"),
+```
+
+# `urls.py` (django_app)
+
+-   We have to link that template to our django project too.
+
+```python
+    path("register", include("myapp.urls")),
+```
+
+# `views.py` (myapp)
+
+-   We are storing _user_ details in **user model** created by django default.
+-   To use that, we need to import it from `django.contrib.auth.models`
+-   We also need to show _messages_ to _user_, if the details entered by the _user_ are incorrect.
+-   And, lastly, we need to _redirect_ the _user_ to register page again if the details are found incorrect.
+
+```python
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
+```
+
+-   Using these we can make a basic registration page.
+
+```python
+def register(request):
+    if request.method != "POST":
+        return render(request, "register.html")
+
+    username = request.POST["username"]
+    email = request.POST["email"]
+    password = request.POST["pswd"]
+    rep_pswd = request.POST["rep-pswd"]
+
+    if password != rep_pswd:
+        messages.error(request, "Password doesn't match!")
+        return redirect("register")
+
+    user_exists = User.objects.filter(username=username).exists()
+    email_exists = User.objects.filter(email=email).exists()
+    if user_exists and email_exists:
+        messages.error(request, "Username and Email has already been registered!")
+        return redirect("register")
+    elif user_exists:
+        messages.error(request, "Username already exists!")
+        return redirect("register")
+    elif email_exists:
+        messages.error(request, "Email already exists!")
+        return redirect("register")
+
+    user = User.objects.create_user(username=username, email=email, password=password)
+    user.save()
+    return redirect("login")
+```
+
+-   To send message, if the details are incorrect, we can use `error()` or `info()` method from the `message` class.
+-   -   It requires, two arguments, request and the message to be displayed.
+-   If the details are found incorrect, we can redirect the _user_ back to registration page to enter correct details using `redirect("register")`.
+-   We can also check whether the provided details are already present in our database or not, using `User.objects.filter(field=value).exists()`.
+-   -   It returns `bool`, if the provided value for the field is already exist or not.
+-   To create a new user, we use `User.objects.create_user()` and pass in all the field and their values.
+-   -   And use `save()` function to save it.
 
 ---

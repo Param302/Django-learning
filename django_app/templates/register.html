@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        h3 {
+            background-color: rgba(231, 74, 74, 0.488);
+            color: black;
+            width: fit-content;
+            padding: 10px 20px;
+            border: 2px solid red;
+            border-radius: 10px;
+        }
+
+        form {
+            width: fit-content;
+        }
+
+        label {
+            display: block;
+            margin: 10px;
+        }
+
+        input {
+            margin: 5px 0 0 10px;
+            width: 200px;
+        }
+
+        fieldset {
+            width: fit-content;
+        }
+
+        fieldset label {
+            display: inline-block;
+        }
+
+        fieldset input {
+            margin: 0 10px;
+            width: auto;
+        }
+
+        input[type="submit"] {
+            width: fit-content;
+            padding: 10px 30px;
+            margin: 10px 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sign Up</h1>
+    {% for message in messages %}
+    <h3>{{message}}</h3>
+    {% endfor %}
+    <form method="POST" action="register">
+        {% csrf_token %}
+        <label for="first-name">First name: <br>
+            <input type="text" name="first-name" id="first-name" placeholder="first name" required>
+        </label>
+        <label for="last-name">Last name: <br>
+            <input type="text" name="last-name" id="last-name" placeholder="last name" required>
+        </label><br>
+        <!-- Doesn't working right now -->
+        <!-- <fieldset>
+            <legend>Sex</legend>
+            <label for="male">
+                <input type="radio" name="sex" id="male" value="M" required>Male
+            </label>
+            <label for="female">
+                <input type="radio" name="sex" id="female" value="F" required>Female
+            </label>
+        </fieldset><br> -->
+        <label for="username">Username: <br>
+            <input type="text" name="username" id="username" placeholder="Username" required>
+        </label>
+        <label for="email">Email: <br>
+            <input type="email" name="email" id="email" placeholder="abc.123@mail.com" required>
+        </label>
+        <label for="pswd">Password: <br>
+            <input type="password" name="pswd" id="password" placeholder="password" required>
+        </label>
+        <label for="rep-pswd">Confirm password: <br>
+            <input type="password" name="rep-pswd" id="repeat-password" placeholder="repeat password" required>
+        </label>
+        <input type="submit" value="Sign Up">
+    </form>
+</body>
+
+</html>

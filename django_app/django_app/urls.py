@@ -24,4 +24,5 @@ urlpatterns = [
     path("form", include("myapp.urls")),
     path("counter", include("myapp.urls")),
     path("details", include("myapp.urls")),
+    path("register", include("myapp.urls")),
 ]
